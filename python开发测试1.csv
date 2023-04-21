@@ -1,0 +1,31 @@
+import requests
+import  bs4
+import pandas as pd
+result = {"ISIN": [],   # ISIN
+          "Bond Code": [],  # 债券代码
+          "Issuer": [],  # 发行人
+          "url": [],   # 网址
+          "Bond Type":[],  #债务类型
+          "Issue Date":[],  #发行日期
+          }
+for i in range(11):
+    url = "https://iftp.chinamoney.com.cn/english/bdInfo/" + str(i)
+    print(url)
+    r = requests.get(url)
+    html = bs4.BeautifulSoup(r.text, "html.parser")
+    all_san = html.find("ul", class_="san-input-pair").find_all("li")
+    for date in all_san:
+        ISIN = date.find("label", _msthash="153").text.strip()
+        Bond Code = date.find("label", _msthash="154").text"
+        Issuer = date.find("label", _msthash="155").text
+        url = date.find("label", _msthash="156")["href"]
+        Bond Type = date.find("label", _msthash="157").text
+        Issue Date = date.find("label", _msthash="158").text
+        result["ISIN"].append(ISIN)
+        result["Bond Code"].append(Bond Code)
+        result["Issuer"].append(Issuer)
+        result["url"].append(url)
+        result["Bond Type"].append(Bond Type)
+        result["Issue Date"].append(Issue Date)
+    df = pd.DataFrame(result)
+    df.to_csv("chinamoney.csv", encoding="utf_8_sig")

@@ -1,0 +1,11 @@
+f=open('C:\Users\lmy2474446939\Downloads\500shuju.text' , 'r' )
+connect=f.read()
+def arr_size(arr,size):
+    s=[]
+    for i in range(0,int(len(arr))+1,size):
+        c=arr[i:i+size]
+        s.append(c)
+    newlist = [x for x in s if x]
+    return newlist
+print(arr_size(f,80))
+
